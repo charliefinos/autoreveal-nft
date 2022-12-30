@@ -2,33 +2,27 @@ const pinataSDK = require("@pinata/sdk");
 const fs = require("fs");
 
 require("dotenv").config();
-async function uploadToPinataAndSaveHashes(imagePath) {
-  // Set up connection to Pinata
+
+async function uploadToPinataAndSaveHashes(imagePath, id) {
   const pinata = new pinataSDK(process.env.API_KEY, process.env.API_SECRET);
 
   const readableStream = fs.createReadStream(imagePath);
 
   const options = {
     pinataMetadata: {
-      name: "charlie",
+      name: id,
     },
     pinataOptions: {
       cidVersion: 0,
     },
   };
 
-  pinata
-    .pinFileToIPFS(readableStream, options)
-    .then((result) => {
-      //handle results here
-      console.log(result);
-    })
-    .catch((err) => {
-      //handle error here
-      console.log(err);
-    });
-
-  console.log(imageHash);
+  try {
+    const image = await pinata.pinFileToIPFS(readableStream, options);
+    console.log(image);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-uploadToPinataAndSaveHashes("sample-files/images/pepe.png");
+uploadToPinataAndSaveHashes("sample-files/images/pepe.png", "2");
