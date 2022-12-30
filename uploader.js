@@ -4,10 +4,7 @@ const fs = require("fs");
 require("dotenv").config();
 async function uploadToPinataAndSaveHashes(imagePath) {
   // Set up connection to Pinata
-  const pinata = new pinataSDK(
-    "614e8595c5808282db15",
-    "e1c942e5a97b6a1dc6510d1d23445afbd5ed923ba33ac082bc8d8676c5fa7484"
-  );
+  const pinata = new pinataSDK(process.env.API_KEY, process.env.API_SECRET);
 
   const readableStream = fs.createReadStream(imagePath);
 
