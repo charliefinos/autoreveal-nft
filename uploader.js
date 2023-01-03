@@ -3,14 +3,14 @@ const fs = require("fs");
 
 require("dotenv").config();
 
-async function uploadToPinataAndSaveHashes(imagePath, id) {
+async function uploadToPinataAndSaveHashes(path, id) {
   const pinata = new pinataSDK(process.env.API_KEY, process.env.API_SECRET);
 
-  const readableStream = fs.createReadStream(imagePath);
+  const readableStream = fs.createReadStream(path);
 
   const options = {
     pinataMetadata: {
-      name: id,
+      name: id.toString(),
     },
     pinataOptions: {
       cidVersion: 0,
