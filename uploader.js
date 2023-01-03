@@ -18,11 +18,11 @@ async function uploadToPinataAndSaveHashes(path, id) {
   };
 
   try {
-    const image = await pinata.pinFileToIPFS(readableStream, options);
-    console.log(image);
+    const file = await pinata.pinFileToIPFS(readableStream, options);
+    return file;
   } catch (err) {
     console.log(err);
   }
 }
 
-uploadToPinataAndSaveHashes("sample-files/images/pepe.png", "2");
+module.exports = uploadToPinataAndSaveHashes;
