@@ -2,12 +2,15 @@ const mongoose = require("mongoose");
 const Nft = require("./models/Nft.model");
 require("dotenv").config();
 
-async function uploadNftMetadata() {
-  //   const client = new MongoClient(
-  //     `mongodb+srv://carlos123:${process.env.MONGO_PASSWORD}@cluster0.6jygryu.mongodb.net/?retryWrites=true&w=majority`,
-  //     { useNewUrlParser: true, useUnifiedTopology: true }
-  //   );
-
+async function addNft(
+  imageHash,
+  highResHash,
+  trackHash,
+  nftId,
+  name,
+  description,
+  attributes
+) {
   const connectionString = `mongodb+srv://carlos123:${process.env.MONGO_PASSWORD}@cluster0.6jygryu.mongodb.net/?retryWrites=true&w=majority`;
 
   try {
@@ -17,38 +20,22 @@ async function uploadNftMetadata() {
     });
 
     const myNft = new Nft({
-      id: 2,
-      name: "aa",
-      description: "1asdasd",
-      image: "www.asdasd.com",
-      high_res_image: "www.asd.com",
-      animation_url: "asdasdasd",
-      attributes: [{ trait_type: "Head", value: "asd" }],
+      id: nftId,
+      name: name,
+      description: description,
+      image: `https://ipfs.io/ipfs/${imageHash}`,
+      highres_image: `https://ipfs.io/ipfs/${highResHash}`,
+      animation_url: `https://ipfs.io/ipfs/${trackHash}`,
+      external_url: `https://ipfs.io/ipfs/${trackHash}`,
+      attributes: attributes,
     });
 
     const res = await myNft.save();
-    mongoose.close();
+    mongoose.connection.close();
     console.log("connected", res);
   } catch (e) {
     console.error(e);
   }
-
-  //   try {
-  //     await client.connect();
-  //     const myNft = Nft.create({
-  //       id: 2,
-  //       name: "aa",
-  //       description: "1asdasd",
-  //       image: "www.asdasd.com",
-  //       high_res_image: "www.asd.com",
-  //       animation_url: "asdasdasd",
-  //       attributes: [{ trait_type: "Head", value: "asd" }],
-  //     });
-  //     return myNft;
-  //     console.log(nftSave);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
 }
 
-uploadNftMetadata();
+module.exports = addNft;
